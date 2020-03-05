@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RequestParam;
  */
 
 @Controller
-public class HelloController {
-    @GetMapping("/hello")
-    public String hello(@RequestParam(name = "name") String name, Model modle){
-        modle.addAttribute("name", name);
-    return "hello"; //这里的hello必须是hello 其他的都不行，因为resuorces/template下面的HTML文件名是hello
+public class IndexController {
+    @GetMapping("/")
+    public String index(){    //(@RequestParam(name = "name") String name, Model modle)
+      //  modle.addAttribute("name", name);
+    return "index"; //这里的hello必须是hello 其他的都不行，因为resuorces/template下面的HTML文件名是hello
     }
 }
