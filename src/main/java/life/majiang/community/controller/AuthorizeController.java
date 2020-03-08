@@ -14,7 +14,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
 
 /**
@@ -38,7 +40,7 @@ public class AuthorizeController {
     public String callback(@RequestParam(name="code")String code,
                            @RequestParam(name="state")String state,
                            //spring自动把上下文中的request放进去使用
-                           HttpServletRequest request){
+                           HttpServletResponse response){
         AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
         accessTokenDTO.setCode(code);
         accessTokenDTO.setState(state);
@@ -51,7 +53,8 @@ public class AuthorizeController {
         if(githubUser != null){
             User user = new User();
             System.out.println("User的地址为"+user);
-            user.setToken(UUID.randomUUID().toString());
+            String token = UUID.randomUUID().toString();
+            user.setToken(token);
             user.setName(githubUser.getName());
             user.setAccountId(String.valueOf(githubUser.getId()));
             user.setGmtCreate(System.currentTimeMillis());
@@ -59,6 +62,7 @@ public class AuthorizeController {
             System.out.println("user的NAME是："+user.getName());
             //如果user不为空则获取到了信息，我们此时写入cookie和session
             userMapper.insert(user);
+            response.addCookie(new Cookie("token",token));
             request.getSession().setAttribute("user", githubUser);
             return "redirect:/"; // 重新跳回index页面，此时地址栏中也不会显示传回来的token信息
         }else{
