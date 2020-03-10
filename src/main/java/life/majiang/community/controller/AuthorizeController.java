@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
 
+
 /**
  * @author c_sir
  * @create 2020-03-06 10:45
@@ -40,7 +41,8 @@ public class AuthorizeController {
     public String callback(@RequestParam(name="code")String code,
                            @RequestParam(name="state")String state,
                            //spring自动把上下文中的request放进去使用
-                           HttpServletResponse response){
+                           HttpServletResponse response,
+                           HttpServletRequest request){
         AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
         accessTokenDTO.setCode(code);
         accessTokenDTO.setState(state);
