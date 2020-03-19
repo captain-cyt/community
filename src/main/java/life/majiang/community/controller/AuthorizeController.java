@@ -52,16 +52,17 @@ public class AuthorizeController {
         String accessToken = githubProvider.getAccessToken(accessTokenDTO);
         GithubUser githubUser = githubProvider.getUser(accessToken);
         System.out.println("获取回来的名称为："+githubUser.getName());
-        if(githubUser != null){
+        if(githubUser != null && githubUser.getId() != null){
             User user = new User();
-            System.out.println("User的地址为"+user);
             String token = UUID.randomUUID().toString();
             user.setToken(token);
             user.setName(githubUser.getName());
             user.setAccountId(String.valueOf(githubUser.getId()));
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(user.getGmtCreate());   //上一行已经获取到时间了，这里只用获取上一行代码的结果即可
+            user.setAvatarUrl(githubUser.getAvatarUrl());
             System.out.println("user的NAME是："+user.getName());
+            System.out.println("User的地址为"+user);
             //如果user不为空则获取到了信息，我们此时写入cookie和session
             userMapper.insert(user);
             response.addCookie(new Cookie("token",token));
