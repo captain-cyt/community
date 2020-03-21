@@ -23,4 +23,12 @@ public interface QuestionMapper {
 
     @Select("SELECT COUNT(1) from question")
     Integer count();    //获取questino总共的记录数，放进count方法里面
+
+
+    @Select("select * from question where creator =#{userId} limit #{offset}, #{size}")
+    List<Question> listByUserId(@Param(value = "userId") Integer userId, @Param(value = "offset") Integer offset,@Param(value = "size") Integer size);
+
+    @Select("select count(1) from question where creator = #{userId}")
+    Integer countByUserId(@Param(value="userId") Integer userId);
+
 }

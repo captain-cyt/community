@@ -48,8 +48,8 @@ public class IndexController {
             }
         }
 
-        PageinationDTO pagination = questionService.list(page, size);
-        model.addAttribute("pagination", pagination);
+        PageinationDTO PageinationDTO = questionService.list(page, size);
+        model.addAttribute("pagination", PageinationDTO);
     return "index"; //这里的hello必须是hello 其他的都不行，因为resuorces/template下面的HTML文件名是hello
     }
 }

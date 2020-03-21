@@ -47,7 +47,7 @@ public class PageinationDTO {
 //        if (page < 1) {
 //            page = 1;
 //        }
-//        if (page > totalPage) {
+//        if (page >= totalPage) {
 //            page = totalPage;
 //        }
 
