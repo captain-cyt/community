@@ -8,3 +8,11 @@
 ## 工具
 [git官方下载地址](https://git-scm.com/)
 
+##脚本
+```bash
+mvn flyway:migrate
+mvn -Dmybatis.generator.overwrite=true mybatis-generator:generate
+
+```
+
+

@@ -8,6 +8,7 @@ import life.majiang.community.dto.GithubUser;
 import life.majiang.community.mapper.UserMapper;
 import life.majiang.community.model.User;
 import life.majiang.community.provider.GithubProvider;
+import life.majiang.community.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -35,7 +36,7 @@ public class AuthorizeController {
     @Value("${github.redirect.uri}")
     private String redirectUri;
     @Autowired
-    private UserMapper userMapper;
+    private UserService userService;
 
     @GetMapping("/callback")
     public String callback(@RequestParam(name="code")String code,
@@ -63,8 +64,8 @@ public class AuthorizeController {
             user.setAvatarUrl(githubUser.getAvatarUrl());
             System.out.println("user的NAME是："+user.getName());
             System.out.println("User的地址为"+user);
+            userService.createOrUpdate(user);
             //如果user不为空则获取到了信息，我们此时写入cookie和session
-            userMapper.insert(user);
             response.addCookie(new Cookie("token",token));
             request.getSession().setAttribute("user", githubUser);
             return "redirect:/"; // 重新跳回index页面，此时地址栏中也不会显示传回来的token信息
@@ -72,6 +73,16 @@ public class AuthorizeController {
             //没有获取到user则登录失败，成新登录
         }
        // return "index"; 地址不变，只把页面渲染成index.html 但地址栏改变了
+        return "redirect:/";
+    }
+
+    @GetMapping("/logout")
+    public String logOut(HttpServletResponse response,
+                         HttpServletRequest request){
+        request.getSession().removeAttribute("user");
+        Cookie cookie = new Cookie("token", null);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
         return "redirect:/";
     }
 }
