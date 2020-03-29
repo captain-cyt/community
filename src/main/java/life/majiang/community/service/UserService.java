@@ -29,8 +29,8 @@ public class UserService {
             //数据库中有此用户，更新此用户信息
             User dbUser = users.get(0);
             User updateUser = new User();
-            updateUser.setAvatarUrl(user.getAvatarUrl());
             updateUser.setGmtModified(System.currentTimeMillis());
+            updateUser.setAvatarUrl(user.getAvatarUrl());
             updateUser.setName(user.getName());
             updateUser.setToken(user.getToken());
             UserExample example = new UserExample();

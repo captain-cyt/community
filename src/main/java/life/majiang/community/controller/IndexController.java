@@ -23,6 +23,6 @@ public class IndexController {
                         @RequestParam (name = "size", defaultValue = "3") Integer size){
         PageinationDTO PageinationDTO = questionService.list(page, size);
         model.addAttribute("pagination", PageinationDTO);
-    return "index"; //这里的hello必须是hello 其他的都不行，因为resuorces/template下面的HTML文件名是hello
+        return "index"; //这里的hello必须是hello 其他的都不行，因为resuorces/template下面的HTML文件名是hello
     }
 }

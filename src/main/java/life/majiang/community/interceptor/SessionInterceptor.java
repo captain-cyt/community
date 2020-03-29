@@ -32,7 +32,6 @@ public class SessionInterceptor implements HandlerInterceptor {
                     UserExample userExample = new UserExample();
                     userExample.createCriteria().andTokenEqualTo(token);//自动把token拼接到sql后，编译执行的时候自把java语言编译成sql语言执行
                     List<User> users = userMapper.selectByExample(userExample);
-                    System.out.println("我拿到token了~~~~~~~~~~~~~~~");
                     if (users.size() != 0) {
                         request.getSession().setAttribute("user", users.get(0));
                     }

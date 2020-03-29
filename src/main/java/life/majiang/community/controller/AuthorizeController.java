@@ -67,7 +67,7 @@ public class AuthorizeController {
             userService.createOrUpdate(user);
             //如果user不为空则获取到了信息，我们此时写入cookie和session
             response.addCookie(new Cookie("token",token));
-            request.getSession().setAttribute("user", githubUser);
+//            request.getSession().setAttribute("user", githubUser);
             return "redirect:/"; // 重新跳回index页面，此时地址栏中也不会显示传回来的token信息
         }else{
             //没有获取到user则登录失败，成新登录

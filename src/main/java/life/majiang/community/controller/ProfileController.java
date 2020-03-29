@@ -4,6 +4,7 @@ import life.majiang.community.dto.PageinationDTO;
 import life.majiang.community.mapper.UserMapper;
 import life.majiang.community.model.Question;
 import life.majiang.community.model.User;
+import life.majiang.community.model.UserExample;
 import life.majiang.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 /**
  * @author c_sir
@@ -24,6 +26,8 @@ import javax.validation.constraints.Size;
 public class ProfileController {
     @Autowired
     private QuestionService questionService;
+    @Autowired
+    private UserMapper userMapper;
 
     @GetMapping("/profile/{action}")
     public String profile(@PathVariable(name="action") String action,
@@ -38,16 +42,20 @@ public class ProfileController {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("token")) {
                     String token = cookie.getValue();
-                    if (user != null) {
-                        request.getSession().setAttribute("user", user);
+                    UserExample userExample = new UserExample();
+                    userExample.createCriteria().andTokenEqualTo(token);
+                    List<User> users = userMapper.selectByExample(userExample);
+                    if (users.size() != 0) {
+                        request.getSession().setAttribute("user", users.get(0));
+                        user = users.get(0);
                     }
                     break;
                 }
             }
         }
-        if(user == null){
-            return "redirect:/";
-        }
+//        if(user == null){
+//            return "redirect:/";
+//        }
 
         if("question".contains(action)){
             model.addAttribute("section", "question");
