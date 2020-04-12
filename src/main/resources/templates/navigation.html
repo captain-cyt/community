@@ -20,10 +20,8 @@
                     <button type="submit" class="btn btn-default">搜索</button>
                 </form>
                 <ul class="nav navbar-nav navbar-right">
-                    <a href="/publish">发布问题</a>
-                    <li th:if="${session.user == null} ">
-
-                        <a href="https://github.com/login/oauth/authorize?client_id=Iv1.cc5c9fe5387c53de&redirect_uri=http://localhost:8080/callback&scope=user&state=1">登录</a>
+                    <li th:if="${session.user != null}">
+                        <a href="/publish">发布一个问题</a>
                     </li>
                     <li class="dropdown" th:if="${session.user} ne null">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
@@ -35,6 +33,10 @@
                             <li><a href="/profile/questions">我的问题</a></li>
                             <li><a href="/logout">退出登录</a></li>
                         </ul>
+                    </li>
+                    <li th:if="${session.user == null} ">
+
+                        <a href="https://github.com/login/oauth/authorize?client_id=Iv1.cc5c9fe5387c53de&redirect_uri=http://localhost:8080/callback&scope=user&state=1">登录</a>
                     </li>
                 </ul>
             </div>

@@ -2,7 +2,6 @@ package life.majiang.community.controller;
 
 import life.majiang.community.dto.PageinationDTO;
 import life.majiang.community.mapper.UserMapper;
-import life.majiang.community.model.Question;
 import life.majiang.community.model.User;
 import life.majiang.community.model.UserExample;
 import life.majiang.community.service.QuestionService;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.constraints.Size;
 import java.util.List;
 
 /**
@@ -36,7 +34,11 @@ public class ProfileController {
                           HttpServletRequest request,
                           Model model){
 
-        User user = null;
+        User user = (User) request.getSession().getAttribute("user");
+        if(user != null){
+            return "redirect:/";
+        }
+
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {
@@ -53,19 +55,23 @@ public class ProfileController {
                 }
             }
         }
-//        if(user == null){
-//            return "redirect:/";
-//        }
+        if(user == null){
+            return "redirect:/";
+        }
 
-        if("question".contains(action)){
-            model.addAttribute("section", "question");
+        if ("questions".equals(action)) {
+            model.addAttribute("section", "questions");
             model.addAttribute("sectionName", "我的提问");
-        }else if ("replies".contains(action)){
+            PageinationDTO paginationDTO = questionService.list(user.getId(), page, size);
+            model.addAttribute("pagination", paginationDTO);
+        } else if ("replies".equals(action)) {
+            PageinationDTO paginationDTO = questionService.list(user.getId(), page, size);
             model.addAttribute("section", "replies");
+            model.addAttribute("pagination", paginationDTO);
             model.addAttribute("sectionName", "最新回复");
         }
-        PageinationDTO pageinationDTO = questionService.list(user.getId(), page, size);
-        model.addAttribute("pagination", pageinationDTO);
+        PageinationDTO pageinationDTO = questionService.list(user.getId(),page,size);
+            model.addAttribute("pagination", pageinationDTO);
         return "profile";
     }
 }
